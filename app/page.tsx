@@ -1,7 +1,21 @@
-import { Button } from "@/components/ui/button";
+import HomeView from "@/components/HomeView";
+import { auth } from "@/lib/auth";
 
-export default function Home() {
-  return (
-    <Button variant={"outline"} className={"bg-black text-white"}>Click</Button>
-  );
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+
+export default async function Home() {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    if (!session) {
+        redirect("/login");
+    }
+
+    return (
+        <div>
+            <HomeView />
+        </div>
+    );
 }
